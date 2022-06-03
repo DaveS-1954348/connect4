@@ -1,0 +1,14 @@
+1. random player (illegal moves allowed) VS neural player (10 games)
+neural player: 7 games (8x 4connect)
+random player: 3 games (2x 4connect, 1x illegal move from opponent)
+draw: 0 draws
+
+overal notes:
+the neural player has high predictions for the 4the piece of connect4, so learning training was good.
+In many games he also won pretty early, meaning he actually uses a strategy and knows what he's doing.
+Random player won many games by accident.
+Illegal moves from the neural player are present but minimized.
+
+
+
+2. neural player VS neural player
