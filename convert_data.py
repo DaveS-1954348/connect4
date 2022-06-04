@@ -24,5 +24,9 @@ def read_games(fname):
         yield as_board(game)
 
 
-X = np.vstack([np.hstack(game) for game in read_games("c4-50k.csv")])
-np.save('c4.npy', X)
+def convert(dataset: str):
+    X = np.vstack([np.hstack(game) for game in read_games(dataset)])
+    return X
+    #np.save(save_filepath, X)
+
+

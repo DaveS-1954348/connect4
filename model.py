@@ -2,12 +2,18 @@ import numpy as np
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.utils import to_categorical
+from convert_data import convert
 
 """
-output:     (0) draw
-            (1) player -1 wins
-            (2) player 1 wins
+RED = -1    predict 2
+YELLOW = 1  predict 0
+DRAW = 2
+
+output neurons :     (0) draw
+                     (1) player 1 wins
+                     (2) player -1 wins
 """
+
 
 class Model:
 
@@ -22,10 +28,31 @@ class Model:
         self.model.add(Dense(numberOfOutputs, activation='softmax'))
         self.model.compile(loss='categorical_crossentropy', optimizer="rmsprop", metrics=['accuracy'])
 
+    def get_trained_model(self, dataset="c4-10k.csv", load=True, filepath="savedModel/model", save=True):
+        if load:
+            return self.load(filepath)
+        else:
+            data = np.load(dataset)
+            train_input = []
+            for i in range(len(data)):
+                winner = int(data[i][42])
+                matrix = []
+                for j in range(6):
+                    row = []
+                    for k in range(7):
+                        row.append(int(data[i][j * 6 + k]))
+                    matrix.append(row)
+                train_input.append((winner, matrix))
+            self.train_model(train_input)
+            if save:
+                self.save(filepath)
+        return self.model
+
     def train_model(self, dataset):
+        converted_data = convert(dataset)
         input = []
         output = []
-        for data in dataset:
+        for data in converted_data:
             input.append(data[1])
             output.append(data[0])
 

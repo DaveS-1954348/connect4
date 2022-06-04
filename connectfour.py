@@ -2,9 +2,6 @@ from random import random, randint
 from copy import copy, deepcopy
 import numpy as np
 from sys import stderr
-from random import randrange
-
-from model import Model
 
 
 def check_consecutive(board, consecutive=4):
@@ -152,51 +149,7 @@ class Game:
             player = player * -1
         return self.status
 
-    def neural_play(self, model, startingPlayer=None):
-        """
-        idea:   1# copy the board
-                2# make all possible moves on the board
-                3# predict the best move based on the values
-        """
 
-        player = startingPlayer if startingPlayer is not None else starting_player()  # selects starting player or selects a random player
-
-        while self.status is None:
-            board_copy = deepcopy(self.board)
-
-            max_value = 0
-            best_move = 0
-
-            for col in range(self.width):
-                lowest_row = 0
-                for row in range(self.height):
-                    if board_copy[row][col] == 0:
-                        lowest_row = row
-                        break
-                board_copy = deepcopy(self.board)
-                if player == -1:
-                    board_copy[lowest_row][col] = player
-                    value = model.predict(board_copy, 2)
-                    print(f"predicted value for player {player} is {value}")
-                else:
-                    board_copy[lowest_row][col] = player
-                    value = model.predict(board_copy, 1)
-                    print(f"predicted value for player {player} is {value}")
-                    """best_move = randrange(7)
-                    print(f"player {player} inserts a coin in randomly chosen column {best_move+1}")"""
-                    break
-                if value > max_value:
-                    best_move = col
-                    max_value = value
-
-            print(f"beste move for player {player} is column {best_move+1}")
-            #print(f"before board:\n {self.board}")
-            self.play_move(player, best_move)
-            print(f"after board:\n {self.board}")
-            player *= -1
-            #print(f"switching into player {player}")
-        print(f"game ended, results: {self.status}")
-        return self.status
 
 
 
@@ -208,26 +161,7 @@ class Game:
 #       [ 0,  0,  0,  0,  0,  0,  0]])
 # print(game.status, game)
 # print(game.winning(-1, n=1000))
-def create_model():
-    model = Model(42, 3, 50, 100)
-    data = np.load("c4.npy")
-    input = []
 
-    for i in range(len(data)):
-        winner = int(data[i][42])
-        matrix = []
-        for j in range(6):
-            row = []
-            for k in range(7):
-                row.append(int(data[i][j * 6 + k]))
-            matrix.append(row)
-        input.append((winner, matrix))
-
-    #model.train_model(input)
-    #model.save("savedModel/model")
-    model.load("savedModel/model")
-
-    return model
 
 
 if __name__ == "__main__":

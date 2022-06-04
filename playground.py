@@ -2,7 +2,7 @@ import model
 from connectfour import Game
 from io import StringIO
 from mpi4py.futures import MPIPoolExecutor, MPICommExecutor
-import convert as c
+import convert_data as c
 import numpy as np
 import pandas as pd
 
